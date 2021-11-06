@@ -21,7 +21,7 @@ public class Main {
         }
         File mapObjects = new File(args[0] + "/data/maps/objects");
         ArrayList<String> warpNames = new ArrayList<String>();
-        String ln;
+        String ln = new String();
         for (File mapObject : mapObjects.listFiles()) {
             try {
                 Scanner reader = new Scanner(mapObject);
