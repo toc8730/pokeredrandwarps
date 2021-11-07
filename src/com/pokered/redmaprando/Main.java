@@ -19,11 +19,11 @@ public class Main {
         File mapObjects = new File(args[0] + "/data/maps/objects");
         ArrayList<String> warpNames = new ArrayList<String>();
         ArrayList<Integer> offsets = new ArrayList<Integer>();
-        String ln = new String();
         for (File mapObject : mapObjects.listFiles()) {
             try {
                 Scanner reader = new Scanner(mapObject);
                 int offset = 0;
+                String ln = new String();
                 System.out.println(mapObject.getPath());
                 while (!ln.contains("def_warps_to")) { // will loop until it finds the definition of the warp name
                     offset += ln.length();
