@@ -1,9 +1,6 @@
 package com.pokered.redmaprando;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -47,6 +44,31 @@ public class Main {
                 i++;
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+        try {
+            Process p = Runtime.getRuntime().exec(new String[]{"C:\\cygwin64\\bin\\bash.exe", "-s"});
+            InputStream outStream = p.getInputStream(); // normal output of the shell
+            InputStream errStream = p.getInputStream(); // error output of the shell
+
+            PrintStream ps = new PrintStream(p.getOutputStream());
+            ps.println("cd " + args[0]);
+            ps.println("make");
+            ps.println("exit");
+            ps.close();
+        } catch (IOException e) {
+            try {
+                Process p = Runtime.getRuntime().exec(new String[]{"C:\\cygwin64\\bin\\bash.exe", "-s"});
+                InputStream outStream = p.getInputStream(); // normal output of the shell
+                InputStream errStream = p.getInputStream(); // error output of the shell
+
+                PrintStream ps = new PrintStream(p.getOutputStream());
+                ps.println("cd " + args[0]);
+                ps.println("make");
+                ps.println("exit");
+                ps.close();
+            } catch (IOException e2) {
+                e2.printStackTrace();
             }
         }
     }
