@@ -41,8 +41,9 @@ public class Main {
         int i = 0; // iterator of warpNames and offsets
         for (File mapObject : mapObjects.listFiles()) {
             try {
-                FileWriter writer = new FileWriter(mapObject);
-                writer.write(warpNames.get(i), offsets.get(i), warpNames.get(i).length()); // overwrites the "warps_to" token in the current file
+                RandomAccessFile writer = new RandomAccessFile(mapObject, "rw");
+                writer.seek(offsets.get(i));
+                writer.writeChars(warpNames.get(i)); // overwrites "warps_to" token with randomized one
                 i++;
             } catch (IOException e) {
                 e.printStackTrace();
