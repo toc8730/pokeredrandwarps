@@ -28,24 +28,21 @@ public class Main {
                 while (!ln.contains("def_warps_to")) { // will loop until it finds the definition of the warp name
                     offset += ln.length();
                     ln = reader.nextLine();
-                    offset++; // to account for newline
                 }
-                offset += 14; // should offset it exactly at the starting pos of the token
+                offset += 28; // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 warpNames.add(ln.substring(14)); // adds the "warps_to" token to the list
                 offsets.add(offset);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        for (String s : warpNames)
-            System.out.println(s);
-        /* Collections.shuffle(warpNames); // randomize
+        Collections.shuffle(warpNames); // randomize
         int i = 0; // iterator of warpNames and offsets
         for (File mapObject : mapObjects.listFiles()) {
             try {
                 RandomAccessFile writer = new RandomAccessFile(mapObject, "rw");
                 writer.seek(offsets.get(i));
-                writer.writeChars(warpNames.get(i)); // overwrites "warps_to" token with randomized one
+                writer.writeBytes(warpNames.get(i)); // overwrites "warps_to" token with randomized one
                 i++;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -59,22 +56,18 @@ public class Main {
             PrintStream ps = new PrintStream(p.getOutputStream());
             ps.println("cd " + args[0]);
             ps.println("make");
-            ps.println("exit");
-            ps.close();
         } catch (IOException e) {
             try {
-                Process p = Runtime.getRuntime().exec(new String[]{"C:\\cygwin64\\bin\\bash.exe", "-s"});
+                Process p = Runtime.getRuntime().exec(new String[]{"C:\\cygwin\\bin\\bash.exe", "-s"});
                 InputStream outStream = p.getInputStream(); // normal output of the shell
                 InputStream errStream = p.getInputStream(); // error output of the shell
 
                 PrintStream ps = new PrintStream(p.getOutputStream());
                 ps.println("cd " + args[0]);
                 ps.println("make");
-                ps.println("exit");
-                ps.close();
             } catch (IOException e2) {
                 e2.printStackTrace();
             }
-        } */
+        }
     }
 }
