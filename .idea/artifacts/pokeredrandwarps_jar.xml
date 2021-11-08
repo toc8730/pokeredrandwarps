@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="pokeredrandwarps:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/pokeredrandwarps_jar</output-path>
+    <root id="archive" name="pokeredrandwarps.jar">
+      <element id="module-output" name="pokeredrandwarps" />
+    </root>
+  </artifact>
+</component>
