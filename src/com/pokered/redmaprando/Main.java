@@ -1,6 +1,7 @@
 package com.pokered.redmaprando;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -18,20 +19,20 @@ public class Main {
         }
         File mapObjects = new File(args[0] + "/data/maps/objects");
         ArrayList<String> warpNames = new ArrayList<String>();
-        ArrayList<Integer> offsets = new ArrayList<Integer>();
+        ArrayList<StringBuilder> fileCreators = new ArrayList<StringBuilder>();
         for (File mapObject : mapObjects.listFiles()) {
             try {
+                StringBuilder warpTokenRemoved = new StringBuilder();
                 Scanner reader = new Scanner(mapObject);
-                int offset = 0;
                 String ln = new String();
                 System.out.println(mapObject.getPath());
                 while (!ln.contains("def_warps_to")) { // will loop until it finds the definition of the warp name
-                    offset += ln.length();
+                    warpTokenRemoved.append(ln + "\n");
                     ln = reader.nextLine();
                 }
-                offset += 28; // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                warpTokenRemoved.append("\tdef_warps_to ");
                 warpNames.add(ln.substring(14)); // adds the "warps_to" token to the list
-                offsets.add(offset);
+                fileCreators.add(warpTokenRemoved);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -40,9 +41,11 @@ public class Main {
         int i = 0; // iterator of warpNames and offsets
         for (File mapObject : mapObjects.listFiles()) {
             try {
-                RandomAccessFile writer = new RandomAccessFile(mapObject, "rw");
-                writer.seek(offsets.get(i));
-                writer.writeBytes(warpNames.get(i)); // overwrites "warps_to" token with randomized one
+                FileWriter writer = new FileWriter(mapObject);
+                fileCreators.get(i).append(warpNames.get(i));
+                System.out.println(fileCreators.get(i).toString());
+                writer.write(fileCreators.get(i).toString());
+                writer.close();
                 i++;
             } catch (IOException e) {
                 e.printStackTrace();
