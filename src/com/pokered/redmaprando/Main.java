@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         if (args.length == 0) {
             System.out.println("Please input filepath of the decompiled ROM (pokered).");
             return;
@@ -18,7 +18,9 @@ public class Main {
             return;
         }
         File mapObjects = new File(args[0] + "/data/maps/objects");
+        File mapHeaders = new File(args[0] + "/data/maps/headers");
         ArrayList<String> warpNames = new ArrayList<String>();
+        ArrayList<String> oldWarpNames = new ArrayList<String>();
         ArrayList<StringBuilder> fileCreators = new ArrayList<StringBuilder>();
         for (File mapObject : mapObjects.listFiles()) {
             try {
@@ -32,6 +34,7 @@ public class Main {
                 }
                 warpTokenRemoved.append("\tdef_warps_to ");
                 warpNames.add(ln.substring(14)); // adds the "warps_to" token to the list
+                oldWarpNames.add(ln.substring(14));
                 fileCreators.add(warpTokenRemoved);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -47,6 +50,28 @@ public class Main {
                 writer.write(fileCreators.get(i).toString());
                 writer.close();
                 i++;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        i = 0; // reusing the iterator
+        for (File mapHeader : mapHeaders.listFiles()) { // round 2, this time with the file headers
+            try {
+                Scanner reader = new Scanner(mapHeader);
+                StringBuilder fileCreator = new StringBuilder();
+                FileWriter writer = new FileWriter(mapHeader);
+                String ln = new String();
+                while (reader.hasNextLine()) {
+                    ln = reader.nextLine();
+                    fileCreator.append(ln + '\n');
+                }
+                reader.close();
+                System.out.println(fileCreator.toString());
+                writer.write(fileCreator.toString().replaceAll(oldWarpNames.get(i), warpNames.get(i)));
+                writer.close();
+            }
+            catch(FileNotFoundException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
